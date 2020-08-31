@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: k8s-cleanup
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: k8s-cleanup
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 10%
+  template:
+    metadata:
+      labels:
+        app: k8s-cleanup
+    spec:
+      volumes:
+        - name: dockersocket
+          hostPath:
+            path: /var/run/docker.sock
+      containers:
+      - name: k8s-cleanup
+        image: jonathanbaraldi/k8s-cleanup
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 50Mi
+        volumeMounts:
+          - name: dockersocket
+            mountPath: /var/run/docker.sock

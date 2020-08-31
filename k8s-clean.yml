@@ -1,0 +1,31 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: k8s-cleanup
+  namespace: kube-system
+spec:
+  schedule: "0 */3 * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: k8s-cleanup
+        spec:
+          nodeSelector:
+            kubernetes.io/role: master
+          tolerations:
+          - effect: NoSchedule
+            key: node-role.kubernetes.io/master
+          restartPolicy: OnFailure
+          serviceAccountName: k8s-cleanup
+          containers:
+            - name: k8s-cleanup
+              image: jonathanbaraldi/k8s-cleanup
+              command: ["/bin/bash", "/bin/k8s-clean.sh"]
+              imagePullPolicy: Always
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 50Mi
