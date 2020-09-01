@@ -5,7 +5,8 @@ metadata:
   name: etcd-empty-dir-cleanup
   namespace: kube-system
 spec:
-  schedule: "0 2 * * *"
+  schedule: "*/1 * * * *"
+  # schedule: "0 2 * * *"
   concurrencyPolicy: "Forbid"
   jobTemplate:
     spec:
@@ -13,12 +14,6 @@ spec:
         metadata:
           name: etcd-empty-dir-cleanup
         spec:
-          hostNetwork: true
-          nodeSelector:
-            kubernetes.io/role: master
-          tolerations:
-          - effect: NoSchedule
-            key: node-role.kubernetes.io/master
           restartPolicy: OnFailure
           containers:
           - name: k8s-cleanup
@@ -28,3 +23,5 @@ spec:
               requests:
                 cpu: 100m
                 memory: 50Mi
+          nodeSelector:
+             role: master

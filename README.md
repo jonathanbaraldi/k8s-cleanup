@@ -14,11 +14,11 @@ No CronJob (`k8s-clean.yml`) você pode setar  `DAYS` para modificar o máximo d
 
 ### Deployment
 
-```
-kubectl -n kube-system apply -f rbac.yml
-kubectl -n kube-system apply -f docker-clean.yml
-kubectl -n kube-system apply -f k8s-clean.yml
-kubectl -n kube-system apply -f etcd-empty-dir-cleanup.yml
+```sh
+$ kubectl -n kube-system apply -f rbac.yml
+$ kubectl -n kube-system apply -f docker-clean.yml
+$ kubectl -n kube-system apply -f k8s-clean.yml
+$ kubectl -n kube-system apply -f etcd-empty-dir-cleanup.yml
 ```
 
 

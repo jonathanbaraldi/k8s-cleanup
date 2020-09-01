@@ -5,7 +5,8 @@ metadata:
   name: k8s-cleanup
   namespace: kube-system
 spec:
-  schedule: "0 */3 * * *"
+  schedule: "*/1 * * * *"
+  # schedule: "0 */3 * * *"
   concurrencyPolicy: "Forbid"
   jobTemplate:
     spec:
@@ -13,11 +14,6 @@ spec:
         metadata:
           name: k8s-cleanup
         spec:
-          nodeSelector:
-            kubernetes.io/role: master
-          tolerations:
-          - effect: NoSchedule
-            key: node-role.kubernetes.io/master
           restartPolicy: OnFailure
           serviceAccountName: k8s-cleanup
           containers:
@@ -29,3 +25,5 @@ spec:
                 requests:
                   cpu: 100m
                   memory: 50Mi
+          nodeSelector:
+             role: master
